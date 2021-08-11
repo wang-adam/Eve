@@ -12,11 +12,11 @@ import json
 import requests
 import pyaudio
 import eve_v1
+import pyautogui
 
 # Speech engine
-
 r = sr.Recognizer()
-r.energy_threshold = 1000
+r.energy_threshold = 10000
 
 # converts text to speech
 def speak(text):
@@ -45,7 +45,7 @@ def greet_me():
 def main():
     greet_me()
     global globalvar
-    globalvar = [1, 20]
+    globalvar = [1, 5]
     r.listen_in_background(sr.Microphone(), takeCommand, phrase_time_limit=5)
     print("Listening...")
 
@@ -55,11 +55,32 @@ def takeCommand(r, audio):
         results = r.recognize_google(audio, language="en-in").lower()
         print("\n" + results)
         if results == "stop":
-            speak("I have stopped listening and will terminate. Goodbye.")
+            speak("I have stopped listening and will shut down. Goodbye.")
             os._exit(0)
         if results == "lock" or "lock computer" in results:
             cmd = "rundll32.exe user32.dll, LockWorkStation"
             subprocess.call(cmd)
+        elif results == "rerun":
+            speak("I am restarting, I'll be right back.")
+            os.execv(sys.executable, ["python"] + sys.argv)
+        elif "change window" in results:
+            pyautogui.keyDown("alt")
+            time.sleep(0.2)
+            if "cycle" in results:
+                pyautogui.keyDown("shift")
+                time.sleep(0.2)
+            pyautogui.press("tab")
+            time.sleep(0.2)
+            pyautogui.keyUp("alt")
+            pyautogui.keyUp("shift")
+        # elif "wikipedia" in results:
+        #     speak("Searching Wikipedia...")
+        #     results = results.replace("wikipedia", "")
+        #     results = wikipedia.summary(results, sentences=3)
+        #     speak("According to Wikipedia")
+        #     speak(results)
+        elif "search" in results:
+            webbrowser.open_new_tab(results.replace("search", ""))
         elif "open" in results:
             count = 0
             response = "Opening "
@@ -130,6 +151,7 @@ def takeCommand(r, audio):
 
 
 if __name__ == "__main__":
+    speak("Hello, I am Eve, Adam's Digital Assistant.")
     main()
 
 while True:

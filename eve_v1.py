@@ -22,6 +22,7 @@ speech_recognizer = SpeechRecognizer(speech_config=speech_config)
 
 
 def tts(text):
+    print(text)
     synthesizer.speak_text_async(text)
 
 
@@ -72,7 +73,6 @@ def from_mic():
             count += 1
 
         if count == 0:
-            print("Nothing opened")
             tts("No programs opened.")
         else:
             response = response.split(",")
@@ -81,7 +81,6 @@ def from_mic():
             combined_response = ""
             for i in range(len(response) - 1):
                 combined_response += response[i]
-            print(combined_response)
             tts(combined_response)
 
 
@@ -89,17 +88,16 @@ def from_mic():
 
 
 def main():
-    # if time.localtime().tm_hour >= 12:
-    #     if time.localtime().tm_hour <= 18:
-    #         greeting = "Good afternoon Adam,"
-    #     else:
-    #         greeting = "Good evening Adam,"
-    # else:
-    #     greeting = "Good morning Adam,"
-    # greeting += " how may I help you?"
-    # print(greeting)
-    # tts(greeting)
-    from_mic()
+    if time.localtime().tm_hour >= 12:
+        if time.localtime().tm_hour <= 18:
+            greeting = "Good afternoon Adam,"
+        else:
+            greeting = "Good evening Adam,"
+    else:
+        greeting = "Good morning Adam,"
+    greeting += " how may I help you?"
+    tts(greeting)
+    # from_mic()
 
 
 if __name__ == "__main__":

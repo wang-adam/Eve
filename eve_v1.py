@@ -10,7 +10,7 @@ import os
 import webbrowser
 import time
 
-subscriptionKey = "842578183f154233aa7d42f9f2d59bad"
+subscriptionKey = "SUBSCRIPTION_KEY_HERE"
 region = "eastus"
 
 # Create a speech configuration

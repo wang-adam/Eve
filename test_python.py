@@ -22,16 +22,18 @@ def winEnumHandler( hwnd, ctx ):
 
 
 
-# w.GetWindowText (w.GetForegroundWindow())
+w.GetWindowText (w.GetForegroundWindow())
 
-# pid = win32process.GetWindowThreadProcessId(w.GetForegroundWindow())
 
-# print(psutil.Process(pid[-1]).name(), w.GetForegroundWindow())
-while(True):
-    time.sleep(5)
-    w.EnumWindows(winEnumHandler, None)
-    print(dict)
-    print()
+for i in range(10):
+    pid = win32process.GetWindowThreadProcessId(w.GetForegroundWindow())
+    print(psutil.Process(pid[-1]).name(), w.GetForegroundWindow())
+    time.sleep(3)
+# while(True):
+#     time.sleep(5)
+#     w.EnumWindows(winEnumHandler, None)
+#     print(dict)
+#     print()
 # val = " ten "
 # try:
 #     val = w2n.word_to_num(val)

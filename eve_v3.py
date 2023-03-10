@@ -80,6 +80,7 @@ def takeCommand(r, audio):
             speak("I have stopped listening and will shut down. Goodbye.")
             global running
             running = False
+            sys.exit()
             os._exit(0)
         elif results == "lock" or "lock computer" in results:
             cmd = "rundll32.exe user32.dll, LockWorkStation"
@@ -87,6 +88,30 @@ def takeCommand(r, audio):
         elif results == "rerun":
             speak("I am restarting, I'll be right back.")
             os.execv(sys.executable, ["python"] + sys.argv)
+        elif "change window" in results:
+            pyautogui.keyDown("alt")
+            time.sleep(0.2)
+            if "cycle" in results:
+                pyautogui.keyDown("shift")
+                time.sleep(0.2)
+                results = results.replace("change window cycle","")
+            else:
+                results = results.replace("change window","")
+            if results != "":
+                try:
+                    if "to" in results or "too" in results:
+                        value = 2
+                    else:
+                        value = w2n.word_to_num(results)
+                except Exception as e:
+                    value = int(results)
+            else:
+                value = 1
+            for i in range(value):
+                pyautogui.press("tab")
+            time.sleep(0.2)
+            pyautogui.keyUp("alt")
+            pyautogui.keyUp("shift")
         elif "focus" in results:
             focus_command(results)
         elif "search" in results:
@@ -95,6 +120,13 @@ def takeCommand(r, audio):
             w.EnumWindows(updateOpenApplications, None)
         elif "open" in results:
             open_command(results)
+        elif "close tab" in results:
+            pid = win32process.GetWindowThreadProcessId(w.GetForegroundWindow())
+            if psutil.Process(pid[-1]).name() == "chrome.exe":
+                pyautogui.hotkey("ctrl","w")
+                speak("Closing tab")
+            else:
+                speak("A web application is not focused")
         elif "toggle music" in results:
             pyautogui.press("playpause")
         elif "volume up" in results:
@@ -129,7 +161,7 @@ def takeCommand(r, audio):
             pyautogui.press("prevtrack")
             pyautogui.press("prevtrack")
         elif "list commands" in results:
-            speak("Version 3 of me can perform the following actions: \n TERMINATE myself \n LOCK computer\n RERUN myself \n FOCUS <APPLICATION NAME> \n SEARCH the internet \n OPEN <APPLICATION NAME> \n TOGGLE MUSIC \n VOLUME UP or DOWN <AMOUNT> \n PLAY PREVIOUS or NEXT SONG \n LIST COMMANDS")
+            speak("Version 3 of me can perform the following actions: \n TERMINATE myself \n LOCK computer\n RERUN myself \n CHANGE WINDOW \n FOCUS <APPLICATION NAME> \n SEARCH the internet \n OPEN <APPLICATION NAME> \n TOGGLE MUSIC \n VOLUME UP or DOWN <AMOUNT> \n PLAY PREVIOUS or NEXT SONG \n LIST COMMANDS")
 
 
 

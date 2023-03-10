@@ -1,18 +1,18 @@
-from hashlib import new
 import speech_recognition as sr
 import pyttsx3
-import datetime
-import wikipedia
+# import datetime
+# import wikipedia
 import webbrowser
 import os, sys
 import time
 import subprocess
-import wolframalpha
-import json
-import requests
+# import wolframalpha
+# import json
+# import requests
 import pyaudio
-import eve_v1
+# import eve_v1
 import pyautogui
+
 
 # Speech engine
 r = sr.Recognizer()
@@ -24,7 +24,8 @@ def speak(text):
     print(text)
     engine = pyttsx3.init("sapi5")
     voices = engine.getProperty("voices")
-    engine.setProperty("voice", voices[1].id)
+    engine.setProperty("voice", voices[1].id)  
+    engine.setProperty("rate", 250)
     engine.say(text)
     engine.runAndWait()
     del engine
@@ -54,10 +55,10 @@ def takeCommand(r, audio):
     try:
         results = r.recognize_google(audio, language="en-in").lower()
         print("\n" + results)
-        if results == "stop":
+        if results == "terminate":
             speak("I have stopped listening and will shut down. Goodbye.")
             os._exit(0)
-        if results == "lock" or "lock computer" in results:
+        elif results == "lock" or "lock computer" in results:
             cmd = "rundll32.exe user32.dll, LockWorkStation"
             subprocess.call(cmd)
         elif results == "rerun":
@@ -80,7 +81,7 @@ def takeCommand(r, audio):
         #     speak("According to Wikipedia")
         #     speak(results)
         elif "search" in results:
-            webbrowser.open_new_tab(results.replace("search", ""))
+            webbrowser.open_new_tab("https://www.google.com/search?q={}".format(results.replace("search", "")))
         elif "open" in results:
             count = 0
             response = "Opening "

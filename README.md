@@ -20,5 +20,5 @@ Added "list commands" command that enumerates all the commands Eve can currently
 
 ## What's next?
 - Add more commands
-- Processing input speech more efficiently, possibly have a wake up word.  
+- Process input speech more efficiently, possibly have a wake up phrase.  
 - Move away from hardcoding commands (would require some NLP or AI model)

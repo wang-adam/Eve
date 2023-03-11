@@ -2,7 +2,7 @@
 My personal digital assistant that can perform various tasks on my desktop using voice commands.
 
 ## Version 1 (Deprecated)
-Uses Microsoft Azure Cognitive Services to perform speech to text synthesis to convert verbal commands into text. The text is used to perform actions, currently supports opening specific hardcoded applications such as Google Chrome, Spotify, Google Calendar, Gmail, Valorant, Visual Studio Code. Version 1 can also speak back to the user. It performs a greeting on startup and whether not application(s) were opened or not.
+Uses Microsoft Azure [Cognitive Services](https://azure.microsoft.com/en-us/products/cognitive-services/?&ef_id=Cj0KCQiAx6ugBhCcARIsAGNmMbjzcBbWEp4sgB6VLshWLdsuN098SrsJi6BROeoOXpcSd814eqdEtkAaAvsfEALw_wcB:G:s&OCID=AIDcmm5edswduu_SEM_Cj0KCQiAx6ugBhCcARIsAGNmMbjzcBbWEp4sgB6VLshWLdsuN098SrsJi6BROeoOXpcSd814eqdEtkAaAvsfEALw_wcB:G:s&gclid=Cj0KCQiAx6ugBhCcARIsAGNmMbjzcBbWEp4sgB6VLshWLdsuN098SrsJi6BROeoOXpcSd814eqdEtkAaAvsfEALw_wcB#features) to perform speech to text synthesis to convert verbal commands into text. The text is used to perform actions, currently supports opening specific hardcoded applications such as Google Chrome, Spotify, Google Calendar, Gmail, Valorant, Visual Studio Code. Version 1 can also speak back to the user. It performs a greeting on startup and whether not application(s) were opened or not.
 
 
 ## Version 2 (Deprecated)

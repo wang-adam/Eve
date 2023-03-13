@@ -23,6 +23,18 @@ w=win32gui
 open_applications = {}
 
 running = True
+is_executing_commands = True
+
+def main():
+    w.EnumWindows(updateOpenApplications, None)
+    greet_me()
+    global globalvar
+    globalvar = [1, 5]
+    r.listen_in_background(sr.Microphone(), takeAudio, phrase_time_limit=5)
+    global running
+    while running:
+        time.sleep(0.01)
+
 
 # Converts text to speech
 def speak(text):
@@ -36,6 +48,7 @@ def speak(text):
     engine.runAndWait()
     del engine
 
+
 # Greeting on start up
 def greet_me():
     if time.localtime().tm_hour >= 12:
@@ -48,15 +61,7 @@ def greet_me():
     greeting += " how may I help you?"
     speak("Hello, I am Eve, Adam's Digital Assistant.")
     speak(greeting)
-
-
-def main():
-    w.EnumWindows(updateOpenApplications, None)
-    greet_me()
-    global globalvar
-    globalvar = [1, 5]
-    r.listen_in_background(sr.Microphone(), takeCommand, phrase_time_limit=5)
-
+ 
 
 # Recreate mapping of open applications
 def updateOpenApplications( hwnd, ctx ):
@@ -70,12 +75,25 @@ def updateOpenApplications( hwnd, ctx ):
             open_applications[name] = {hwnd}
 
 
-
-def takeCommand(r, audio):
+def takeAudio(r, audio):
     try:
         global open_applications
+        global is_executing_commands
         results = r.recognize_google(audio, language="en-in").lower()
-        print("\n" + results)
+        print(results)
+        # if "hey eve" in results:
+        #     start_index = results.index("hey eve")
+        #     print(results[start_index+8:])
+        #     results = results[start_index+8:]
+        if results == "start executing commands" and not is_executing_commands:
+            is_executing_commands = True
+            speak("I have resumed executing commands")
+        elif not is_executing_commands or results == "stop executing commands":
+            if is_executing_commands:
+                is_executing_commands = False
+                speak("I have stopped executing commands until you request for me to start again")
+            return
+        
         if results == "terminate":
             speak("I have stopped listening and will shut down. Goodbye.")
             global running
@@ -139,7 +157,6 @@ def takeCommand(r, audio):
                 value = int(value/2)
             else:
                 value = 1
-            print(value)
             for i in range(value):
                 pyautogui.press("volumeup")
         elif "volume down" in results:
@@ -152,7 +169,6 @@ def takeCommand(r, audio):
                 value = int(value/2)
             else:
                 value = 1
-            print(value)
             for i in range(value):
                 pyautogui.press("volumedown")
         elif "play next song" in results:
@@ -162,9 +178,6 @@ def takeCommand(r, audio):
             pyautogui.press("prevtrack")
         elif "list commands" in results:
             speak("Version 3 of me can perform the following actions: \n TERMINATE myself \n LOCK computer\n RERUN myself \n CHANGE WINDOW \n FOCUS <APPLICATION NAME> \n SEARCH the internet \n OPEN <APPLICATION NAME> \n TOGGLE MUSIC \n VOLUME UP or DOWN <AMOUNT> \n PLAY PREVIOUS or NEXT SONG \n LIST COMMANDS")
-
-
-
     except Exception as e:
         # global globalvar
         # sys.stdout.write(
@@ -178,7 +191,8 @@ def takeCommand(r, audio):
         # else:
         #     globalvar[0] += 1
         # sys.stdout.flush()
-        print("I'm listening...")
+        if is_executing_commands:
+            print("I'm listening...")
         print(e)
 
 
@@ -287,6 +301,4 @@ def focus_command(results):
 if __name__ == "__main__":
     main()
 
-while running:
-    time.sleep(0.01)
-    
+   
